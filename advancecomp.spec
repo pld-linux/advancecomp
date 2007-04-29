@@ -1,10 +1,10 @@
-Summary:	Recompression utilities for .ZIP archives, .PNG snapshots, .MNG video clips and .GZ files.
-Summary(pl.UTF-8):	Narzędzia rekompresujące pliki zip, png, mng, gz.
+Summary:	Recompression utilities for .ZIP archives, .PNG snapshots, .MNG video clips and .gz files
+Summary(pl.UTF-8):	Narzędzia rekompresujące pliki ZIP, PNG, MNG, gz
 Name:		advancecomp
 Version:	1.15
 Release:	1
 License:	GPL
-Group:		Applications
+Group:		Applications/File
 Source0:	http://dl.sourceforge.net/advancemame/%{name}-%{version}.tar.gz
 # Source0-md5:	bb236d8bee6fa473d34108cda1e09076
 URL:		http://advancemame.sourceforge.net/comp-readme.html
@@ -24,16 +24,16 @@ The main features are:
 - Recompress MNG files using Delta and Move optimization. 
 
 %description -l pl.UTF-8
-AdvanceCOMP jest kolekcją narzędzi rekompresujących archiwa zip,
-obrazy png, pliki wideo mng i pliki gz.
+AdvanceCOMP jest kolekcją narzędzi rekompresujących archiwa ZIP,
+obrazy PNG, pliki wideo MNG i pliki gz.
 
-Ich głównym zastosowaniem jest rekompresja kolekcji rom-ów,
+Ich głównym zastosowaniem jest rekompresja kolekcji ROM-ów,
 zrzutów ekranu i urywków wideo emulowanych gier.
 
 Głównymi cechami są:
-- Rekompresja plików zip, gz, png i mng za pomocą implementacji
+- Rekompresja plików ZIP, gz, PNG i MNG za pomocą implementacji
   kompresji deflate z 7-Zipa.
-- Rekompresja plików mng z użyciem optymalizacji delta i move.
+- Rekompresja plików MNG z użyciem optymalizacji delta i move.
 
 %prep
 %setup -q
@@ -44,7 +44,9 @@ Głównymi cechami są:
 
 %install
 rm -rf $RPM_BUILD_ROOT
-%{__make} install DESTDIR=$RPM_BUILD_ROOT
+
+%{__make} install \
+	DESTDIR=$RPM_BUILD_ROOT
 
 %clean
 rm -rf $RPM_BUILD_ROOT
