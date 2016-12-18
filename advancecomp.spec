@@ -1,13 +1,19 @@
+#
+# Conditional build:
+%bcond_with	bzip2	# bzip2 compression
+#
 Summary:	Recompression utilities for .ZIP archives, .PNG snapshots, .MNG video clips and .gz files
 Summary(pl.UTF-8):	Narzędzia rekompresujące pliki ZIP, PNG, MNG, gz
 Name:		advancecomp
 Version:	1.15
 Release:	1
-License:	GPL
+License:	GPL v2+
 Group:		Applications/File
-Source0:	http://dl.sourceforge.net/advancemame/%{name}-%{version}.tar.gz
+Source0:	http://downloads.sourceforge.net/advancemame/%{name}-%{version}.tar.gz
 # Source0-md5:	bb236d8bee6fa473d34108cda1e09076
 URL:		http://advancemame.sourceforge.net/comp-readme.html
+%{?with_bzip2:BuildRequires:	bzip2-devel}
+BuildRequires:	libstdc++-devel
 BuildRequires:	zlib-devel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -39,7 +45,8 @@ Głównymi cechami są:
 %setup -q
 
 %build
-%configure
+%configure \
+	%{?with_bzip2:--enable-bzip2}
 %{__make}
 
 %install
@@ -54,5 +61,11 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(644,root,root,755)
 %doc AUTHORS HISTORY README
-%attr(755,root,root) %{_bindir}/*
-%{_mandir}/man1/*
+%attr(755,root,root) %{_bindir}/advdef
+%attr(755,root,root) %{_bindir}/advmng
+%attr(755,root,root) %{_bindir}/advpng
+%attr(755,root,root) %{_bindir}/advzip
+%{_mandir}/man1/advdef.1*
+%{_mandir}/man1/advmng.1*
+%{_mandir}/man1/advpng.1*
+%{_mandir}/man1/advzip.1*
