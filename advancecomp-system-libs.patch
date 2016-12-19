@@ -1,0 +1,98 @@
+--- advancecomp-1.23/Makefile.am.orig	2016-11-21 18:28:02.000000000 +0100
++++ advancecomp-1.23/Makefile.am	2016-12-18 22:10:03.761097301 +0100
+@@ -21,32 +21,9 @@
+ 	7z/WindowIn.cc \
+ 	7z/WindowOut.cc
+ 
+-libdeflate_SOURCES = \
+-	libdeflate/adler32.c \
+-	libdeflate/aligned_malloc.c \
+-	libdeflate/crc32.c \
+-	libdeflate/deflate_compress.c \
+-	libdeflate/deflate_decompress.c \
+-	libdeflate/gzip_compress.c \
+-	libdeflate/gzip_decompress.c \
+-	libdeflate/x86_cpu_features.c \
+-	libdeflate/zlib_compress.c \
+-	libdeflate/zlib_decompress.c
+-
+-zopfli_SOURCES = \
+-	zopfli/blocksplitter.c \
+-	zopfli/cache.c \
+-	zopfli/deflate.c \
+-	zopfli/gzip_container.c \
+-	zopfli/hash.c \
+-	zopfli/katajainen.c \
+-	zopfli/lz77.c \
+-	zopfli/squeeze.c \
+-	zopfli/tree.c \
+-	zopfli/util.c \
+-	zopfli/zlib_container.c \
+-	zopfli/zopfli.h \
+-	zopfli/zopfli_lib.c
++libdeflate_LIBS = -ldeflate
++zopfli_LIBS = -lzopfli
++LDADD = $(libdeflate_LIBS) $(zopfli_LIBS)
+ 
+ advzip_SOURCES = \
+ 	rezip.cc \
+@@ -58,9 +35,7 @@
+ 	zipsh.cc \
+ 	getopt.c \
+ 	snprintf.c \
+-	$(7z_SOURCES) \
+-	$(libdeflate_SOURCES) \
+-	$(zopfli_SOURCES)
++	$(7z_SOURCES)
+ 
+ advpng_SOURCES = \
+ 	repng.cc \
+@@ -75,9 +50,7 @@
+ 	lib/png.c \
+ 	lib/error.c \
+ 	lib/snstring.c \
+-	$(7z_SOURCES) \
+-	$(libdeflate_SOURCES) \
+-	$(zopfli_SOURCES)
++	$(7z_SOURCES)
+ 
+ advmng_SOURCES = \
+ 	remng.cc \
+@@ -95,9 +68,7 @@
+ 	lib/mng.c \
+ 	lib/error.c \
+ 	lib/snstring.c \
+-	$(7z_SOURCES) \
+-	$(libdeflate_SOURCES) \
+-	$(zopfli_SOURCES)
++	$(7z_SOURCES)
+ 
+ advdef_SOURCES = \
+ 	redef.cc \
+@@ -113,9 +84,7 @@
+ 	lib/snstring.c \
+ 	lib/png.c \
+ 	lib/mng.c \
+-	$(7z_SOURCES) \
+-	$(libdeflate_SOURCES) \
+-	$(zopfli_SOURCES)
++	$(7z_SOURCES)
+ 
+ EXTRA_DIST = \
+ 	README AUTHORS HISTORY INSTALL COPYING \
+--- advancecomp-1.23/compress.h.orig	2016-09-26 22:04:03.000000000 +0200
++++ advancecomp-1.23/compress.h	2016-12-18 22:11:26.444429691 +0100
+@@ -24,11 +24,11 @@
+ #include "7z/7z.h"
+ 
+ extern "C" {
+-#include "libdeflate/libdeflate.h"
++#include <libdeflate.h>
+ }
+ 
+ extern "C" {
+-#include "zopfli/zopfli.h"
++#include <zopfli.h>
+ }
+ 
+ #if USE_BZIP2

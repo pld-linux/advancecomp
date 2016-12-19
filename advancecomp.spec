@@ -5,16 +5,21 @@
 Summary:	Recompression utilities for .ZIP archives, .PNG snapshots, .MNG video clips and .gz files
 Summary(pl.UTF-8):	Narzędzia rekompresujące pliki ZIP, PNG, MNG, gz
 Name:		advancecomp
-Version:	1.15
+Version:	1.23
 Release:	1
-License:	GPL v2+
+License:	GPL v3+
 Group:		Applications/File
 Source0:	http://downloads.sourceforge.net/advancemame/%{name}-%{version}.tar.gz
-# Source0-md5:	bb236d8bee6fa473d34108cda1e09076
+# Source0-md5:	39a205f0ba1baa26550fccc6405a6b45
+Patch0:		%{name}-system-libs.patch
 URL:		http://advancemame.sourceforge.net/comp-readme.html
+BuildRequires:	autoconf >= 2.65
+BuildRequires:	automake
 %{?with_bzip2:BuildRequires:	bzip2-devel}
+BuildRequires:	libdeflate-devel
 BuildRequires:	libstdc++-devel
 BuildRequires:	zlib-devel
+BuildRequires:	zopfli-devel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -43,8 +48,13 @@ Głównymi cechami są:
 
 %prep
 %setup -q
+%patch0 -p1
 
 %build
+%{__aclocal}
+%{__autoconf}
+%{__autoheader}
+%{__automake}
 %configure \
 	%{?with_bzip2:--enable-bzip2}
 %{__make}
