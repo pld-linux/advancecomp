@@ -6,18 +6,20 @@ Summary:	Recompression utilities for .ZIP archives, .PNG snapshots, .MNG video c
 Summary(pl.UTF-8):	Narzędzia rekompresujące pliki ZIP, PNG, MNG, gz
 Name:		advancecomp
 Version:	1.23
-Release:	1
+Release:	2
 License:	GPL v3+
 Group:		Applications/File
 Source0:	http://downloads.sourceforge.net/advancemame/%{name}-%{version}.tar.gz
 # Source0-md5:	39a205f0ba1baa26550fccc6405a6b45
 Patch0:		%{name}-system-libs.patch
+Patch1:		%{name}-7z-lib.patch
 URL:		http://advancemame.sourceforge.net/comp-readme.html
 BuildRequires:	autoconf >= 2.65
 BuildRequires:	automake
 %{?with_bzip2:BuildRequires:	bzip2-devel}
 BuildRequires:	libdeflate-devel
 BuildRequires:	libstdc++-devel
+BuildRequires:	libtool >= 2:2
 BuildRequires:	zlib-devel
 BuildRequires:	zopfli-devel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -46,11 +48,49 @@ Głównymi cechami są:
   kompresji deflate z 7-Zipa.
 - Rekompresja plików MNG z użyciem optymalizacji delta i move.
 
+%package 7z
+Summary:	7z library from AdvanceCOMP project
+Summary(pl.UTF-8):	Biblioteka 7z z projektu AdvanceCOMP
+Group:		Libraries
+
+%description 7z
+7z library from AdvanceCOMP project.
+
+%description 7z -l pl.UTF-8
+Biblioteka 7z z projektu AdvanceCOMP.
+
+%package 7z-devel
+Summary:	Header file for AdvanceCOMP 7z library
+Summary(pl.UTF-8):	Plik nagłówkowy biblioteki AdvanceCOMP 7z
+Group:		Development/Libraries
+Requires:	%{name}-7z = %{version}-%{release}
+Requires:	libstdc++-devel
+
+%description 7z-devel
+Header file for AdvanceCOMP 7z library.
+
+%description 7z-devel -l pl.UTF-8
+Plik nagłówkowy biblioteki AdvanceCOMP 7z.
+
+%package 7z-static
+Summary:	Static AdvanceCOMP 7z library
+Summary(pl.UTF-8):	Statyczna biblioteka AdvanceCOMP 7z
+Group:		Development/Libraries
+Requires:	%{name}-7z-devel = %{version}-%{release}
+
+%description 7z-static
+Static AdvanceCOMP 7z library.
+
+%description 7z-static -l pl.UTF-8
+Statyczna biblioteka AdvanceCOMP 7z.
+
 %prep
 %setup -q
 %patch0 -p1
+%patch1 -p1
 
 %build
+%{__libtoolize}
 %{__aclocal}
 %{__autoconf}
 %{__autoheader}
@@ -65,8 +105,14 @@ rm -rf $RPM_BUILD_ROOT
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
+# no external dependencies
+%{__rm} $RPM_BUILD_ROOT%{_libdir}/libadv7z.la
+
 %clean
 rm -rf $RPM_BUILD_ROOT
+
+%post	7z -p /sbin/ldconfig
+%postun	7z -p /sbin/ldconfig
 
 %files
 %defattr(644,root,root,755)
@@ -79,3 +125,17 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man1/advmng.1*
 %{_mandir}/man1/advpng.1*
 %{_mandir}/man1/advzip.1*
+
+%files 7z
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/libadv7z.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libadv7z.so.0
+
+%files 7z-devel
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/libadv7z.so
+%{_includedir}/adv7z
+
+%files 7z-static
+%defattr(644,root,root,755)
+%{_libdir}/libadv7z.a

@@ -1,0 +1,69 @@
+--- advancecomp-1.23/Makefile.am.orig	2016-12-19 05:33:51.310793262 +0100
++++ advancecomp-1.23/Makefile.am	2017-05-09 18:58:20.486037160 +0200
+@@ -1,6 +1,10 @@
+ bin_PROGRAMS = advzip advpng advmng advdef
+ 
+-7z_SOURCES = \
++lib_LTLIBRARIES = libadv7z.la
++adv7zincludedir = $(includedir)/adv7z
++adv7zinclude_HEADERS = 7z/7z.h
++
++libadv7z_la_SOURCES = \
+ 	7z/7zdeflate.cc \
+ 	7z/7zlzma.cc \
+ 	7z/AriBitCoder.cc \
+@@ -23,7 +27,7 @@
+ 
+ libdeflate_LIBS = -ldeflate
+ zopfli_LIBS = -lzopfli
+-LDADD = $(libdeflate_LIBS) $(zopfli_LIBS)
++LDADD = $(libdeflate_LIBS) $(zopfli_LIBS) libadv7z.la
+ 
+ advzip_SOURCES = \
+ 	rezip.cc \
+@@ -35,7 +39,7 @@
+ 	zipsh.cc \
+ 	getopt.c \
+ 	snprintf.c \
+-	$(7z_SOURCES)
++	$(nil)
+ 
+ advpng_SOURCES = \
+ 	repng.cc \
+@@ -50,7 +54,7 @@
+ 	lib/png.c \
+ 	lib/error.c \
+ 	lib/snstring.c \
+-	$(7z_SOURCES)
++	$(nil)
+ 
+ advmng_SOURCES = \
+ 	remng.cc \
+@@ -68,7 +72,7 @@
+ 	lib/mng.c \
+ 	lib/error.c \
+ 	lib/snstring.c \
+-	$(7z_SOURCES)
++	$(nil)
+ 
+ advdef_SOURCES = \
+ 	redef.cc \
+@@ -84,7 +88,7 @@
+ 	lib/snstring.c \
+ 	lib/png.c \
+ 	lib/mng.c \
+-	$(7z_SOURCES)
++	$(nil)
+ 
+ EXTRA_DIST = \
+ 	README AUTHORS HISTORY INSTALL COPYING \
+--- advancecomp-1.23/configure.ac.orig	2016-11-21 18:26:40.000000000 +0100
++++ advancecomp-1.23/configure.ac	2017-05-09 19:02:08.302701223 +0200
+@@ -2,6 +2,7 @@
+ AC_PREREQ([2.65])
+ AC_INIT([AdvanceCOMP], [1.23], [], [], [http://www.advancemame.it])
+ AM_INIT_AUTOMAKE([foreign no-dependencies subdir-objects])
++LT_INIT
+ AC_CONFIG_SRCDIR([rezip.cc])
+ AC_CONFIG_HEADERS([config.h])
+ AC_CANONICAL_HOST
