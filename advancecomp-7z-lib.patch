@@ -1,5 +1,5 @@
---- advancecomp-1.23/Makefile.am.orig	2016-12-19 05:33:51.310793262 +0100
-+++ advancecomp-1.23/Makefile.am	2017-05-09 18:58:20.486037160 +0200
++++ advancecomp-2.6/Makefile.am.orig	2024-04-17 18:59:18.464658604 +0200
++++ advancecomp-2.6/Makefile.am	2024-04-17 19:02:19.014563123 +0200
 @@ -1,6 +1,10 @@
  bin_PROGRAMS = advzip advpng advmng advdef
  
@@ -12,56 +12,55 @@
  	7z/7zdeflate.cc \
  	7z/7zlzma.cc \
  	7z/AriBitCoder.cc \
-@@ -23,7 +27,7 @@
- 
- libdeflate_LIBS = -ldeflate
- zopfli_LIBS = -lzopfli
--LDADD = $(libdeflate_LIBS) $(zopfli_LIBS)
-+LDADD = $(libdeflate_LIBS) $(zopfli_LIBS) libadv7z.la
- 
- advzip_SOURCES = \
- 	rezip.cc \
-@@ -35,7 +39,7 @@
- 	zipsh.cc \
+@@ -37,9 +41,8 @@ advzip_SOURCES = \
  	getopt.c \
  	snprintf.c \
--	$(7z_SOURCES)
-+	$(nil)
+ 	portable.c \
+-	$(7z_SOURCES) \
+ 	$(nil)
+-advzip_LDADD = $(libdeflate_LIBS) $(zopfli_LIBS)
++advzip_LDADD = $(libdeflate_LIBS) $(zopfli_LIBS) libadv7z.la
  
  advpng_SOURCES = \
  	repng.cc \
-@@ -50,7 +54,7 @@
+@@ -55,9 +58,8 @@ advpng_SOURCES = \
  	lib/png.c \
  	lib/error.c \
  	lib/snstring.c \
--	$(7z_SOURCES)
-+	$(nil)
+-	$(7z_SOURCES) \
+ 	$(nil)
+-advpng_LDADD = $(libdeflate_LIBS) $(zopfli_LIBS)
++advpng_LDADD = $(libdeflate_LIBS) $(zopfli_LIBS) libadv7z.la
  
  advmng_SOURCES = \
  	remng.cc \
-@@ -68,7 +72,7 @@
+@@ -76,9 +78,8 @@ advmng_SOURCES = \
  	lib/mng.c \
  	lib/error.c \
  	lib/snstring.c \
--	$(7z_SOURCES)
-+	$(nil)
+-	$(7z_SOURCES) \
+ 	$(nil)
+-advmng_LDADD = $(libdeflate_LIBS) $(zopfli_LIBS)
++advmng_LDADD = $(libdeflate_LIBS) $(zopfli_LIBS) libadv7z.la
  
  advdef_SOURCES = \
  	redef.cc \
-@@ -84,7 +88,7 @@
+@@ -95,9 +96,8 @@ advdef_SOURCES = \
  	lib/snstring.c \
  	lib/png.c \
  	lib/mng.c \
--	$(7z_SOURCES)
-+	$(nil)
+-	$(7z_SOURCES) \
+ 	$(nil)
+-advdef_LDADD = $(libdeflate_LIBS) $(zopfli_LIBS)
++advdef_LDADD = $(libdeflate_LIBS) $(zopfli_LIBS) libadv7z.la
  
- EXTRA_DIST = \
- 	README AUTHORS HISTORY INSTALL COPYING \
---- advancecomp-1.23/configure.ac.orig	2016-11-21 18:26:40.000000000 +0100
-+++ advancecomp-1.23/configure.ac	2017-05-09 19:02:08.302701223 +0200
-@@ -2,6 +2,7 @@
- AC_PREREQ([2.65])
- AC_INIT([AdvanceCOMP], [1.23], [], [], [http://www.advancemame.it])
+ # Add the .version file in the distribution
+ dist-hook:
+--- advancecomp-2.6/configure.ac.orig	2023-10-10 17:17:08.000000000 +0200
++++ advancecomp-2.6/configure.ac	2024-04-17 19:07:04.858546549 +0200
+@@ -4,6 +4,7 @@ dnl Get version number from git
+ m4_define([git_revision], m4_esyscmd_s([./autover.sh]))
+ AC_INIT([AdvanceCOMP], [git_revision], [], [], [http://www.advancemame.it])
  AM_INIT_AUTOMAKE([foreign no-dependencies subdir-objects])
 +LT_INIT
  AC_CONFIG_SRCDIR([rezip.cc])

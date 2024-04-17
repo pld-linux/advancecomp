@@ -5,15 +5,16 @@
 Summary:	Recompression utilities for .ZIP archives, .PNG snapshots, .MNG video clips and .gz files
 Summary(pl.UTF-8):	Narzędzia rekompresujące pliki ZIP, PNG, MNG, gz
 Name:		advancecomp
-Version:	1.23
-Release:	2
+Version:	2.6
+Release:	1
 License:	GPL v3+
 Group:		Applications/File
-Source0:	http://downloads.sourceforge.net/advancemame/%{name}-%{version}.tar.gz
-# Source0-md5:	39a205f0ba1baa26550fccc6405a6b45
+#Source0Download: https://github.com/amadvance/advancecomp/releases
+Source0:	https://github.com/amadvance/advancecomp/releases/download/v%{version}/%{name}-%{version}.tar.gz
+# Source0-md5:	fc7f6c2bdbabae26f90bf18ec63e9242
 Patch0:		%{name}-system-libs.patch
 Patch1:		%{name}-7z-lib.patch
-URL:		http://advancemame.sourceforge.net/comp-readme.html
+URL:		http://www.advancemame.it/comp-readme.html
 BuildRequires:	autoconf >= 2.65
 BuildRequires:	automake
 %{?with_bzip2:BuildRequires:	bzip2-devel}

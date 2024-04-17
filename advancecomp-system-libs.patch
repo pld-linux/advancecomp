@@ -1,20 +1,22 @@
---- advancecomp-1.23/Makefile.am.orig	2016-11-21 18:28:02.000000000 +0100
-+++ advancecomp-1.23/Makefile.am	2016-12-18 22:10:03.761097301 +0100
-@@ -21,32 +21,9 @@
+--- advancecomp-2.6/Makefile.am.orig	2023-10-10 17:01:16.000000000 +0200
++++ advancecomp-2.6/Makefile.am	2024-04-17 18:59:18.464658604 +0200
+@@ -21,34 +21,10 @@ bin_PROGRAMS = advzip advpng advmng advd
  	7z/WindowIn.cc \
  	7z/WindowOut.cc
  
 -libdeflate_SOURCES = \
+-	libdeflate/arm/cpu_features.c \
+-	libdeflate/x86/cpu_features.c \
 -	libdeflate/adler32.c \
--	libdeflate/aligned_malloc.c \
 -	libdeflate/crc32.c \
--	libdeflate/deflate_compress.c \
+-	libdeflate/deflate_compress.c\
 -	libdeflate/deflate_decompress.c \
 -	libdeflate/gzip_compress.c \
 -	libdeflate/gzip_decompress.c \
--	libdeflate/x86_cpu_features.c \
+-	libdeflate/utils.c \
 -	libdeflate/zlib_compress.c \
 -	libdeflate/zlib_decompress.c
+-
 -
 -zopfli_SOURCES = \
 -	zopfli/blocksplitter.c \
@@ -31,55 +33,56 @@
 -	zopfli/zopfli.h \
 -	zopfli/zopfli_lib.c
 +libdeflate_LIBS = -ldeflate
++
++
 +zopfli_LIBS = -lzopfli
-+LDADD = $(libdeflate_LIBS) $(zopfli_LIBS)
  
  advzip_SOURCES = \
  	rezip.cc \
-@@ -58,9 +35,7 @@
- 	zipsh.cc \
- 	getopt.c \
+@@ -62,8 +38,8 @@ advzip_SOURCES = \
  	snprintf.c \
--	$(7z_SOURCES) \
+ 	portable.c \
+ 	$(7z_SOURCES) \
 -	$(libdeflate_SOURCES) \
 -	$(zopfli_SOURCES)
-+	$(7z_SOURCES)
++	$(nil)
++advzip_LDADD = $(libdeflate_LIBS) $(zopfli_LIBS)
  
  advpng_SOURCES = \
  	repng.cc \
-@@ -75,9 +50,7 @@
- 	lib/png.c \
+@@ -79,8 +55,8 @@ advpng_SOURCES = \
  	lib/error.c \
  	lib/snstring.c \
--	$(7z_SOURCES) \
+ 	$(7z_SOURCES) \
 -	$(libdeflate_SOURCES) \
 -	$(zopfli_SOURCES)
-+	$(7z_SOURCES)
++	$(nil)
++advpng_LDADD = $(libdeflate_LIBS) $(zopfli_LIBS)
  
  advmng_SOURCES = \
  	remng.cc \
-@@ -95,9 +68,7 @@
- 	lib/mng.c \
+@@ -101,8 +75,8 @@ advmng_SOURCES = \
  	lib/error.c \
  	lib/snstring.c \
--	$(7z_SOURCES) \
+ 	$(7z_SOURCES) \
 -	$(libdeflate_SOURCES) \
 -	$(zopfli_SOURCES)
-+	$(7z_SOURCES)
++	$(nil)
++advmng_LDADD = $(libdeflate_LIBS) $(zopfli_LIBS)
  
  advdef_SOURCES = \
  	redef.cc \
-@@ -113,9 +84,7 @@
- 	lib/snstring.c \
+@@ -120,8 +93,8 @@ advdef_SOURCES = \
  	lib/png.c \
  	lib/mng.c \
--	$(7z_SOURCES) \
+ 	$(7z_SOURCES) \
 -	$(libdeflate_SOURCES) \
 -	$(zopfli_SOURCES)
-+	$(7z_SOURCES)
++	$(nil)
++advdef_LDADD = $(libdeflate_LIBS) $(zopfli_LIBS)
  
- EXTRA_DIST = \
- 	README AUTHORS HISTORY INSTALL COPYING \
+ # Add the .version file in the distribution
+ dist-hook:
 --- advancecomp-1.23/compress.h.orig	2016-09-26 22:04:03.000000000 +0200
 +++ advancecomp-1.23/compress.h	2016-12-18 22:11:26.444429691 +0100
 @@ -24,11 +24,11 @@
